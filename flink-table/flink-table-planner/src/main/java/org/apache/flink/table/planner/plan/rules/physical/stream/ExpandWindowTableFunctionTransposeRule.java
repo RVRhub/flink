@@ -160,7 +160,7 @@ public class ExpandWindowTableFunctionTransposeRule
         //  1. transpose Calc and WindowTVF, build the new Calc node (the top node)
         // -------------------------------------------------------------------------
         ImmutableBitSet windowColumns = fmq.getRelWindowProperties(windowTVF).getWindowColumns();
-        Tuple4<RexProgram, int[], Object, Object> programInfo =
+        Tuple4<RexProgram, int[], Integer, Boolean> programInfo =
                 WindowUtil.buildNewProgramWithoutWindowColumns(
                         cluster.getRexBuilder(),
                         calc.getProgram(),
@@ -169,8 +169,8 @@ public class ExpandWindowTableFunctionTransposeRule
                         windowColumns.toArray());
         RexProgram newProgram = programInfo._1();
         int[] fieldShifting = programInfo._2();
-        int newTimeField = (int) programInfo._3();
-        boolean timeFieldAdded = (boolean) programInfo._4();
+        int newTimeField = programInfo._3();
+        boolean timeFieldAdded = programInfo._4();
 
         StreamPhysicalCalc newCalc =
                 new StreamPhysicalCalc(
